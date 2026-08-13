@@ -20,9 +20,12 @@ import { verifyToken, verifyAdmin, verifySuperAdmin } from "./middleware/auth.js
 const app = express();
 const server = createServer(app);
 
+// Open CORS: allow any origin (no protection needed per project requirements),
+// with credentials enabled. origin:true reflects the requester's origin.
 const corsOptions = {
-  origin: true,
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+  origin: (origin, cb) => cb(null, origin || true),
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
 };
 
