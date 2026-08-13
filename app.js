@@ -996,6 +996,7 @@ app.get("/api/dashboard/analytics", verifyAdmin, async (req, res) => {
 
 // ─── Start ───────────────────────────────────────────────────────
 const PORT = process.env.PORT || 4000;
+const isVercel = !!process.env.VERCEL;
 
 // Issue download tokens for eBook orders that were confirmed before the
 // secure-download feature existed (idempotent backfill).
@@ -1021,14 +1022,17 @@ const backfillEbookTokens = async () => {
   }
 };
 
-initDB()
+export const ready = initDB()
   .then(async () => {
     await backfillEbookTokens();
-    server.listen(PORT, () => {
-      console.log(`🌱 Ershaye API running on http://localhost:${PORT}`);
-    });
+    if (!isVercel) {
+      server.listen(PORT, () => {
+        console.log(`🌱 Ershaye API running on http://localhost:${PORT}`);
+      });
+    }
   })
   .catch((err) => {
     console.error("❌ Failed to initialize database:", err);
-    process.exit(1);
   });
+
+export default app;
