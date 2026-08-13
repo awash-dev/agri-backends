@@ -1,0 +1,7 @@
+{
+  "ignore": [
+    "*.json",
+    "node_modules"
+  ],
+  "ext": "js,mjs,cjs"
+}
