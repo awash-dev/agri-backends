@@ -20,27 +20,14 @@ import { verifyToken, verifyAdmin, verifySuperAdmin } from "./middleware/auth.js
 const app = express();
 const server = createServer(app);
 
-// CORS: allow the production frontend plus the common local dev origins.
-const defaultAllowedOrigins = [
-  "http://localhost:5173",
-  "http://localhost:4173",
-  "https://everygreen.greenafricafarm.com",
-  "https://www.everygreen.greenafricafarm.com",
-];
-const configuredOrigins = (process.env.CORS_ORIGINS || "")
-  .split(",")
-  .map((o) => o.trim())
-  .filter(Boolean);
-const allowedOrigins = [...new Set([...defaultAllowedOrigins, ...configuredOrigins])];
-
+// CORS: allow any origin (reflected, so credentials/cookies still work).
+// Browsers block `Access-Control-Allow-Origin: *` together with credentials,
+// so we echo the request's origin back instead of hard-coding a whitelist.
 const corsOptions = {
-  origin: (origin, cb) => {
-    if (!origin) return cb(null, true);
-    if (allowedOrigins.includes(origin)) return cb(null, true);
-    return cb(new Error("Origin not allowed by CORS"));
-  },
+  origin: (origin, cb) => cb(null, true),
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  exposedHeaders: ["Content-Disposition"],
   credentials: true,
   optionsSuccessStatus: 204,
   preflightContinue: false,
