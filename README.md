@@ -52,3 +52,4 @@ The seed script creates an admin account and prints its credentials.
 Schema is defined in `config/db.js` (`initDB`) and mirrored in `models/schema.sql`.
 Seed data lives in `scripts/seed.js` (20 produce products across 4 bilingual categories, 2 blog posts, 1 superadmin).
 "# agri-backends" 
+# evergreen-backends
