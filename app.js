@@ -113,7 +113,7 @@ const esc = (s) =>
     .replace(/"/g, "&quot;");
 
 /** The business mailbox — receives admin notifications. */
-const adminMailbox = () => process.env.SMTP_USER || "hello@ershaye.et";
+const adminMailbox = () => process.env.SMTP_USER || "hello@evergreenethiopia.et";
 
 // ─── Helpers ─────────────────────────────────────────────────────
 const genOrderRef = () => {
@@ -145,7 +145,7 @@ const toMeta = (m) => {
 // HEALTH / SETTINGS
 // ============================================================
 app.get("/api/health", (req, res) => {
-  res.json({ success: true, name: "Ershaye API", status: "running" });
+  res.json({ success: true, name: "Evergreen Ethiopia API", status: "running" });
 });
 
 app.get("/api/settings", async (req, res) => {
@@ -203,7 +203,7 @@ app.post("/api/auth/login", async (req, res) => {
 
     const token = jwt.sign(
       { id: admin.id, email: admin.email, role: admin.role },
-      process.env.JWT_SECRET || "ershaye_secret_key_2026",
+      process.env.JWT_SECRET || "evergreen_secret_key_2026",
       { expiresIn: "8h" },
     );
 
@@ -485,9 +485,9 @@ app.post("/api/orders", async (req, res) => {
 
     // Customer confirmation
     sendMailSafe({
-      from: `"Ershaye" <${process.env.SMTP_USER || "orders@ershaye.et"}>`,
+      from: `"Evergreen Ethiopia" <${process.env.SMTP_USER || "orders@evergreenethiopia.et"}>`,
       to: email || (process.env.SMTP_USER ? process.env.SMTP_USER : undefined),
-      subject: `Order Confirmation ${ref} — Ershaye`,
+      subject: `Order Confirmation ${ref} — Evergreen Ethiopia`,
       html: `<h2>መልካም ምርጫ! Your order ${ref} is confirmed.</h2>
         <p>Thank you, <strong>${esc(customer_name)}</strong>. Total: <strong>${total} ETB</strong> (${payment_method === "cod" ? "Cash on delivery" : "Bank transfer"}).</p>
         <table border="1" cellpadding="8" style="border-collapse:collapse;margin-top:12px"><tr><th>Item</th><th>Qty</th><th>Price</th><th>Total</th></tr>${itemsHtml}</table>
@@ -496,7 +496,7 @@ app.post("/api/orders", async (req, res) => {
 
     // Admin notification with full order details
     sendMailSafe({
-      from: `"Ershaye Orders" <${process.env.SMTP_USER || "orders@ershaye.et"}>`,
+      from: `"Evergreen Ethiopia Orders" <${process.env.SMTP_USER || "orders@evergreenethiopia.et"}>`,
       to: adminMailbox(),
       subject: `🛒 New order ${ref} — ${total} ETB`,
       html: `<h2>New order received</h2>
@@ -729,7 +729,7 @@ app.patch("/api/orders/:id/status", verifyAdmin, async (req, res) => {
     };
     if (updated.email) {
       sendMailSafe({
-        from: `"Ershaye" <${process.env.SMTP_USER || "orders@ershaye.et"}>`,
+        from: `"Evergreen Ethiopia" <${process.env.SMTP_USER || "orders@evergreenethiopia.et"}>`,
         to: updated.email,
         subject: `Order ${updated.ref} — ${statusLabels[status] || status}`,
         html: `<h2>Your order ${updated.ref} is now <strong>${statusLabels[status] || status}</strong></h2>
@@ -777,7 +777,7 @@ app.post("/api/posts", verifyAdmin, uploadImage.single("image"), async (req, res
     const { rows } = await pool.query(
       `INSERT INTO posts (title_en, title_am, content_en, content_am, author, category, image, published)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
-      [title_en, title_am, content_en, content_am || content_en, author || "Ershaye", category || "News",
+      [title_en, title_am, content_en, content_am || content_en, author || "Evergreen Ethiopia", category || "News",
         image, published !== "false" && published !== false],
     );
     notifyClients("post_added", rows[0]);
@@ -799,7 +799,7 @@ app.put("/api/posts/:id", verifyAdmin, uploadImage.single("image"), async (req, 
     const { rows } = await pool.query(
       `UPDATE posts SET title_en=$1, title_am=$2, content_en=$3, content_am=$4, author=$5,
          category=$6, image=$7, published=$8 WHERE id=$9 RETURNING *`,
-      [title_en, title_am, content_en, content_am || content_en, author || "Ershaye", category || "News",
+      [title_en, title_am, content_en, content_am || content_en, author || "Evergreen Ethiopia", category || "News",
         image, published !== "false" && published !== false, id],
     );
     notifyClients("post_updated", rows[0]);
@@ -838,10 +838,10 @@ app.post("/api/contact", async (req, res) => {
 
     // Email the message to the business inbox so it's never missed.
     sendMailSafe({
-      from: `"Ershaye Contact" <${adminMailbox()}>`,
+      from: `"Evergreen Ethiopia Contact" <${adminMailbox()}>`,
       to: adminMailbox(),
       subject: `💬 New message from ${rows[0].sender_name} — ${rows[0].subject}`,
-      html: `<h2>New message from the Ershaye contact form</h2>
+      html: `<h2>New message from the Evergreen Ethiopia contact form</h2>
         <p><strong>${esc(rows[0].sender_name)}</strong> &lt;${esc(rows[0].sender_email)}&gt;</p>
         <p><strong>Subject:</strong> ${esc(rows[0].subject)}</p>
         <hr/>
@@ -1030,7 +1030,7 @@ export const ready = initDB()
     await backfillEbookTokens();
     if (!isVercel) {
       server.listen(PORT, () => {
-        console.log(`🌱 Ershaye API running on http://localhost:${PORT}`);
+        console.log(`🌱 Evergreen Ethiopia API running on http://localhost:${PORT}`);
       });
     }
   })

@@ -15,7 +15,7 @@ export const initDB = async () => {
   try {
     await pool.query(`
       -- ============================================================
-      -- Ershaye (እርሻዬ) — Ethiopian fresh produce online shop
+      -- Evergreen Ethiopia — Ethiopian fresh produce online shop
       -- ============================================================
 
       CREATE TABLE IF NOT EXISTS admins (
@@ -137,21 +137,21 @@ export const initDB = async () => {
       VALUES
         ('shop_open', 'true'),
         ('delivery_fee', '150'),
-        ('business_name', 'Ershaye Trading PLC'),
+        ('business_name', 'Evergreen Ethiopia PLC'),
         ('business_phone', '+251 951 469565'),
         ('business_phone_alt', '+251 940 124409'),
-        ('business_email', 'hello@ershaye.et'),
+        ('business_email', 'hello@evergreenethiopia.et'),
         ('business_address', 'Addis Ababa, Ethiopia'),
-        ('telegram_url', 'https://t.me/ershaye'),
-        ('instagram_url', 'https://www.instagram.com/ershayee'),
-        ('facebook_url', 'https://www.facebook.com/Ershaye'),
+        ('telegram_url', 'https://t.me/evergreenethiopia'),
+        ('instagram_url', 'https://www.instagram.com/evergreenethiopia'),
+        ('facebook_url', 'https://www.facebook.com/evergreenethiopia'),
         ('bank_name', 'Commercial Bank of Ethiopia (CBE)'),
         ('bank_account', '1000 1847 2659 3312'),
-        ('bank_holder', 'Ershaye Trading PLC')
+        ('bank_holder', 'Evergreen Ethiopia PLC')
       ON CONFLICT (key) DO NOTHING;
     `);
 
-    console.log("✅ Ershaye database initialized successfully.");
+    console.log("✅ Evergreen Ethiopia database initialized successfully.");
   } catch (err) {
     console.error("❌ DB Init Error:", err);
     throw err;

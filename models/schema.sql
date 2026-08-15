@@ -1,5 +1,5 @@
 -- ============================================================
--- Ershaye (እርሻዬ) — Ethiopian fresh produce online shop
+-- Evergreen Ethiopia — Ethiopian fresh produce online shop
 -- PostgreSQL / Neon schema (mirrors server/config/db.js initDB)
 -- ============================================================
 

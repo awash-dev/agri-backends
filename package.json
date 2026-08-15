@@ -1,5 +1,5 @@
 {
-  "name": "ershaye-server",
+  "name": "evergreen-server",
   "version": "1.0.0",
   "main": "app.js",
   "type": "module",
