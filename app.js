@@ -20,13 +20,25 @@ import { verifyToken, verifyAdmin, verifySuperAdmin } from "./middleware/auth.js
 const app = express();
 const server = createServer(app);
 
-// Open CORS: allow any origin (no protection needed per project requirements),
-// with credentials enabled. origin:true reflects the requester's origin.
+// CORS: allow any origin by reflecting the requester's origin (credentials
+// require an explicit origin, never "*"). Restrict to a fixed list with the
+// CORS_ORIGINS env var (comma-separated) when needed.
+const allowedOrigins = (process.env.CORS_ORIGINS || "")
+  .split(",")
+  .map((o) => o.trim())
+  .filter(Boolean);
+
 const corsOptions = {
-  origin: (origin, cb) => cb(null, origin || true),
+  origin: (origin, cb) => {
+    if (allowedOrigins.length === 0) return cb(null, origin || true);
+    if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
+    return cb(new Error("Origin not allowed by CORS"));
+  },
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
+  optionsSuccessStatus: 204,
+  preflightContinue: false,
 };
 
 app.use(cors(corsOptions));
