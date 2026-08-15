@@ -20,18 +20,23 @@ import { verifyToken, verifyAdmin, verifySuperAdmin } from "./middleware/auth.js
 const app = express();
 const server = createServer(app);
 
-// CORS: allow any origin by reflecting the requester's origin (credentials
-// require an explicit origin, never "*"). Restrict to a fixed list with the
-// CORS_ORIGINS env var (comma-separated) when needed.
-const allowedOrigins = (process.env.CORS_ORIGINS || "")
+// CORS: allow the production frontend plus the common local dev origins.
+const defaultAllowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:4173",
+  "https://everygreen.greenafricafarm.com",
+  "https://www.everygreen.greenafricafarm.com",
+];
+const configuredOrigins = (process.env.CORS_ORIGINS || "")
   .split(",")
   .map((o) => o.trim())
   .filter(Boolean);
+const allowedOrigins = [...new Set([...defaultAllowedOrigins, ...configuredOrigins])];
 
 const corsOptions = {
   origin: (origin, cb) => {
-    if (allowedOrigins.length === 0) return cb(null, origin || true);
-    if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
+    if (!origin) return cb(null, true);
+    if (allowedOrigins.includes(origin)) return cb(null, true);
     return cb(new Error("Origin not allowed by CORS"));
   },
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
