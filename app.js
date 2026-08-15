@@ -161,6 +161,10 @@ const toMeta = (m) => {
 // ============================================================
 // HEALTH / SETTINGS
 // ============================================================
+app.get("/", (req, res) => {
+  res.json({ success: true, name: "Evergreen Ethiopia API", status: "running", message: "Server is running." });
+});
+
 app.get("/api/health", (req, res) => {
   res.json({ success: true, name: "Evergreen Ethiopia API", status: "running" });
 });
